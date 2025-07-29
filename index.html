@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JIGI - La télé qui vous ressemble | Streaming VOD Mali</title>
+    <meta name="description" content="JIGI, plateforme de streaming malienne. Films, séries, Web TV en direct. Abonnement via Orange Money, Moov Money, Wave.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #0a0a0a;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: #ff6b35;
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid #ff6b35;
+            color: #ff6b35;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: #ff6b35;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.7), rgba(255, 107, 53, 0.3));
+            z-index: -1;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        /* Web TV Section */
+        .webtv-section {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            color: white;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ff0000;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .video-player {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(45deg, #333, #555);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* VOD Section */
+        .vod-section {
+            background: #111;
+            color: white;
+        }
+
+        .carousel-container {
+            margin-bottom: 3rem;
+        }
+
+        .carousel-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+
+        .carousel {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scroll-behavior: smooth;
+        }
+
+        .carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .carousel::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .carousel::-webkit-scrollbar-thumb {
+            background: #ff6b35;
+            border-radius: 4px;
+        }
+
+        .movie-card {
+            min-width: 200px;
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .movie-info {
+            padding: 1rem;
+        }
+
+        .movie-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-rating {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Subscription Section */
+        .subscription-section {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured {
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .payment-btn {
+            background: white;
+            color: #ff6b35;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .payment-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: #222;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-author {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        /* Partners Section */
+        .partners-section {
+            background: #111;
+            color: white;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .partner-logo {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            transition: transform 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #ff6b35;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            margin-top: 2rem;
+            color: #666;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #222;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            color: white;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+
+        .close:hover {
+            color: #ff6b35;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ff6b35;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">JIGI</a>
+            <ul class="nav-menu">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#webtv">Web TV</a></li>
+                <li><a href="#series">Séries</a></li>
+                <li><a href="#films">Films</a></li>
+                <li><a href="#replays">Replays</a></li>
+                <li><a href="#abonnement">Abonnement</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="#" class="btn btn-outline" onclick="openModal('loginModal')">Connexion</a>
+                <a href="#" class="btn btn-primary" onclick="openModal('registerModal')">S'inscrire</a>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="accueil">
+        <video class="hero-video" autoplay muted loop>
+            <source src="assets/videos/hero-video.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">JIGI</h1>
+            <p class="hero-subtitle">La télé qui vous ressemble</p>
+            <div class="hero-buttons">
+                <a href="#webtv" class="btn btn-primary btn-large">📺 Regarder en direct</a>
+                <a href="#abonnement" class="btn btn-outline btn-large">💳 S'abonner</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web TV Section -->
+    <section class="section webtv-section" id="webtv">
+        <div class="live-indicator">
+            <span class="live-dot"></span>
+            <span>EN DIRECT</span>
+        </div>
+        <h2 class="section-title">🔴 Web TV en Direct</h2>
+        <div class="video-player">
+            <div class="video-placeholder">
+                📺 Lecteur vidéo en streaming live<br>
+                <small>Programme en cours : Journal du soir</small>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <p><strong>Prochain programme :</strong> Série malienne "Kôrô" à 21h00</p>
+            <p><strong>Qualité :</strong> HD adaptatif selon votre connexion</p>
+        </div>
+    </section>
+
+    <!-- VOD Section -->
+    <section class="section vod-section" id="films">
+        <h2 class="section-title">🎞️ Films et Séries</h2>
+        
+        <div class="carousel-container">
+            <h3 class="carousel-title">À l'affiche</h3>
+            <div class="carousel">
+                <div class="movie-card">
+                    <div class="movie-poster">Yeelen</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Yeelen</div>
+                        <div class="movie-rating">⭐⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-poster">Guimba</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Guimba</div>
+                        <div class="movie-rating">⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-poster">Finzan</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Finzan</div>
+                        <div class="movie-rating">⭐⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-poster">Kôrô</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Série Kôrô</div>
+                        <div class="movie-rating">⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-container">
+            <h3 class="carousel-title">Nouveautés</h3>
+            <div class="carousel">
+                <div class="movie-card">
+                    <div class="movie-poster">Bamako</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Bamako</div>
+                        <div class="movie-rating">⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-poster">Timbuktu</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Timbuktu</div>
+                        <div class="movie-rating">⭐⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-poster">Moolaadé</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Moolaadé</div>
+                        <div class="movie-rating">⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-container">
+            <h3 class="carousel-title">Populaires au Mali</h3>
+            <div class="carousel">
+                <div class="movie-card">
+                    <div class="movie-poster">Waati</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Waati</div>
+                        <div class="movie-rating">⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="movie-poster">Sia</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Sia le rêve du python</div>
+                        <div class="movie-rating">⭐⭐⭐⭐⭐</div>
+                        <button class="btn btn-primary">Voir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subscription Section -->
+    <section class="section subscription-section" id="abonnement">
+        <h2 class="section-title">💳 Offres d'Abonnement</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>24 Heures</h3>
+                <div class="price">500 FCFA</div>
+                <ul style="list-style: none; margin: 1rem 0;">
+                    <li>✓ Accès Web TV</li>
+                    <li>✓ Films et séries</li>
+                    <li>✓ Qualité HD</li>
+                </ul>
+                <button class="btn btn-outline" onclick="selectPlan('24h', 500)">Choisir</button>
+            </div>
+            <div class="pricing-card">
+                <h3>Hebdomadaire</h3>
+                <div class="price">2000 FCFA</div>
+                <ul style="list-style: none; margin: 1rem 0;">
+                    <li>✓ Accès Web TV</li>
+                    <li>✓ Films et séries</li>
+                    <li>✓ Qualité HD</li>
+                    <li>✓ Téléchargement</li>
+                </ul>
+                <button class="btn btn-outline" onclick="selectPlan('week', 2000)">Choisir</button>
+            </div>
+            <div class="pricing-card featured">
+                <h3>Mensuel</h3>
+                <div class="price">5000 FCFA</div>
+                <ul style="list-style: none; margin: 1rem 0;">
+                    <li>✓ Accès Web TV</li>
+                    <li>✓ Films et séries</li>
+                    <li>✓ Qualité HD</li>
+                    <li>✓ Téléchargement</li>
+                    <li>✓ Contenu exclusif</li>
+                </ul>
+                <button class="btn btn-outline" onclick="selectPlan('month', 5000)">Choisir</button>
+            </div>
+            <div class="pricing-card">
+                <h3>Illimité</h3>
+                <div class="price">15000 FCFA</div>
+                <ul style="list-style: none; margin: 1rem 0;">
+                    <li>✓ Accès Web TV</li>
+                    <li>✓ Films et séries</li>
+                    <li>✓ Qualité 4K</li>
+                    <li>✓ Téléchargement</li>
+                    <li>✓ Contenu exclusif</li>
+                    <li>✓ Support prioritaire</li>
+                </ul>
+                <button class="btn btn-outline" onclick="selectPlan('unlimited', 15000)">Choisir</button>
+            </div>
+        </div>
+        <div class="payment-methods">
+            <a href="#" class="payment-btn" onclick="payWithOrange()">📱 Orange Money</a>
+            <a href="#" class="payment-btn" onclick="payWithMoov()">📱 Moov Money</a>
+            <a href="#" class="payment-btn" onclick="payWithWave()">📱 Wave</a>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials-section">
+        <h2 class="section-title">⭐ Ce que disent nos utilisateurs</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "JIGI m'a permis de redécouvrir le cinéma malien. La qualité est excellente et les prix très abordables."
+                </div>
+                <div class="testimonial-author">- Aminata K., Bamako</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Enfin une plateforme qui met en valeur notre culture ! Je recommande vivement JIGI à tous les Maliens."
+                </div>
+                <div class="testimonial-author">- Moussa T., Sikasso</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Le paiement via Orange Money est très pratique. Je peux regarder mes séries préférées partout."
+                </div>
+                <div class="testimonial-author">- Fatoumata D., Ségou</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="section partners-section">
+        <h2 class="section-title">🤝 Nos Partenaires</h2>
+        <div class="partners-grid">
+            <div class="partner-logo">Orange Mali</div>
+            <div class="partner-logo">Moov Africa</div>
+            <div class="partner-logo">Wave</div>
+            <div class="partner-logo">ORTM</div>
+            <div class="partner-logo">Africable</div>
+            <div class="partner-logo">Studio Jamana</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>À propos de JIGI</h3>
+                <a href="#">Notre histoire</a>
+                <a href="#">Équipe</a>
+                <a href="#">Carrières</a>
+                <a href="#">Presse</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#">Centre d'aide</a>
+                <a href="#">FAQ</a>
+                <a href="#">Nous contacter</a>
+                <a href="#">Signaler un problème</a>
+            </div>
+            <div class="footer-section">
+                <h3>Légal</h3>
+                <a href="#">Conditions d'utilisation</a>
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">Mentions légales</a>
+            </div>
+            <div class="footer-section">
+                <h3>Suivez-nous</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link">f</a>
+                    <a href="#" class="social-link">📺</a>
+                    <a href="#" class="social-link">📷</a>
+                    <a href="#" class="social-link">🎵</a>
+                </div>
+                <p style="margin-top: 1rem;">
+                    📱 WhatsApp: +223 70 00 00 00<br>
+                    📧 contact@jigi.ml
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 JIGI TV Mali. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Connexion</h2>
+            <form>
+                <div class="form-group">
+                    <label for="email">Email ou téléphone</label>
+                    <input type="text" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Se connecter</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                <a href="#" style="color: #ff6b35;">Mot de passe oublié ?</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Créer un compte</h2>
+            <form>
+                <div class="form-group">
+                    <label for="fullname">Nom complet</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Numéro de téléphone</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email_reg">Email</label>
+                    <input type="email" id="email_reg" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password_reg">Mot de passe</label>
+                    <input type="password" id="password_reg" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">S'inscrire</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('paymentModal')">&times;</span>
+            <h2>Finaliser l'abonnement</h2>
+            <div id="paymentDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Subscription plan selection
+        let selectedPlan = null;
+        let selectedPrice = 0;
+
+        function selectPlan(plan, price) {
+            selectedPlan = plan;
+            selectedPrice = price;
+            
+            const planNames = {
+                '24h': '24 Heures',
+                'week': 'Hebdomadaire',
+                'month': 'Mensuel',
+                'unlimited': 'Illimité'
+            };
+
+            alert(`Vous avez sélectionné l'abonnement ${planNames[plan]} à ${price} FCFA. Choisissez maintenant votre mode de paiement.`);
+        }
+
+        // Payment functions
+        function payWithOrange() {
+            if (!selectedPlan) {
+                alert('Veuillez d\'abord sélectionner un abonnement.');
+                return;
+            }
+            
+            const paymentDetails = `
+                <h3>Paiement Orange Money</h3>
+                <p><strong>Abonnement :</strong> ${selectedPlan}</p>
+                <p><strong>Montant :</strong> ${selectedPrice} FCFA</p>
+                <div style="background: #f0f0f0; padding: 1rem; border-radius: 5px; margin: 1rem 0; color: #333;">
+                    <p><strong>Instructions :</strong></p>
+                    <p>1. Composez #144#</p>
+                    <p>2. Choisissez "Paiement marchand"</p>
+                    <p>3. Code marchand : <strong>JIGI001</strong></p>
+                    <p>4. Montant : <strong>${selectedPrice}</strong></p>
+                    <p>5. Confirmez avec votre code PIN</p>
+                </div>
+                <button class="btn btn-primary" onclick="confirmPayment('Orange Money')">Confirmer le paiement</button>
+            `;
+            
+            document.getElementById('paymentDetails').innerHTML = paymentDetails;
+            openModal('paymentModal');
+        }
+
+        function payWithMoov() {
+            if (!selectedPlan) {
+                alert('Veuillez d\'abord sélectionner un abonnement.');
+                return;
+            }
+            
+            const paymentDetails = `
+                <h3>Paiement Moov Money</h3>
+                <p><strong>Abonnement :</strong> ${selectedPlan}</p>
+                <p><strong>Montant :</strong> ${selectedPrice} FCFA</p>
+                <div style="background: #f0f0f0; padding: 1rem; border-radius: 5px; margin: 1rem 0; color: #333;">
+                    <p><strong>Instructions :</strong></p>
+                    <p>1. Composez *555#</p>
+                    <p>2. Choisissez "Paiement"</p>
+                    <p>3. Code marchand : <strong>JIGI002</strong></p>
+                    <p>4. Montant : <strong>${selectedPrice}</strong></p>
+                    <p>5. Confirmez avec votre code PIN</p>
+                </div>
+                <button class="btn btn-primary" onclick="confirmPayment('Moov Money')">Confirmer le paiement</button>
+            `;
+            
+            document.getElementById('paymentDetails').innerHTML = paymentDetails;
+            openModal('paymentModal');
+        }
+
+        function payWithWave() {
+            if (!selectedPlan) {
+                alert('Veuillez d\'abord sélectionner un abonnement.');
+                return;
+            }
+            
+            const paymentDetails = `
+                <h3>Paiement Wave</h3>
+                <p><strong>Abonnement :</strong> ${selectedPlan}</p>
+                <p><strong>Montant :</strong> ${selectedPrice} FCFA</p>
+                <div style="background: #f0f0f0; padding: 1rem; border-radius: 5px; margin: 1rem 0; color: #333;">
+                    <p><strong>Instructions :</strong></p>
+                    <p>1. Ouvrez l'application Wave</p>
+                    <p>2. Scannez le QR Code ci-dessous</p>
+                    <p>3. Ou envoyez à : <strong>+223 70 00 00 01</strong></p>
+                    <p>4. Montant : <strong>${selectedPrice} FCFA</strong></p>
+                    <p>5. Référence : <strong>JIGI-${Date.now()}</strong></p>
+                </div>
+                <div style="text-align: center; margin: 1rem 0;">
+                    <div style="width: 150px; height: 150px; background: #333; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white;">
+                        QR Code Wave
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="confirmPayment('Wave')">Confirmer le paiement</button>
+            `;
+            
+            document.getElementById('paymentDetails').innerHTML = paymentDetails;
+            openModal('paymentModal');
+        }
+
+        function confirmPayment(method) {
+            alert(`Paiement via ${method} en cours de traitement. Vous recevrez une confirmation par SMS dans quelques minutes.`);
+            closeModal('paymentModal');
+            selectedPlan = null;
+            selectedPrice = 0;
+        }
+
+        // Carousel auto-scroll
+        function autoScrollCarousels() {
+            const carousels = document.querySelectorAll('.carousel');
+            carousels.forEach(carousel => {
+                carousel.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    carousel.scrollLeft += e.deltaY;
+                });
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            autoScrollCarousels();
+            
+            // Add loading animation to video placeholder
+            const videoPlaceholder = document.querySelector('.video-placeholder');
+            if (videoPlaceholder) {
+                setInterval(() => {
+                    const dots = videoPlaceholder.innerHTML.match(/\./g) || [];
+                    if (dots.length >= 3) {
+                        videoPlaceholder.innerHTML = videoPlaceholder.innerHTML.replace(/\.\.\./g, '');
+                    } else {
+                        videoPlaceholder.innerHTML += '.';
+                    }
+                }, 500);
+            }
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Add some interactive effects
+        document.querySelectorAll('.movie-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.movie-title').textContent;
+                alert(`Ouverture de "${title}"... (Fonctionnalité à implémenter)`);
+            });
+        });
+
+        // Simulate live TV updates
+        function updateLiveInfo() {
+            const programs = [
+                "Journal du soir",
+                "Série malienne 'Kôrô'",
+                "Documentaire sur Tombouctou",
+                "Émission culturelle",
+                "Musique traditionnelle"
+            ];
+            
+            const randomProgram = programs[Math.floor(Math.random() * programs.length)];
+            const liveInfo = document.querySelector('.video-placeholder small');
+            if (liveInfo) {
+                liveInfo.textContent = `Programme en cours : ${randomProgram}`;
+            }
+        }
+
+        // Update live info every 30 seconds
+        setInterval(updateLiveInfo, 30000);
+    </script>
+</body>
+</html>
+
