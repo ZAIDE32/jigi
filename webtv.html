@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web TV en Direct - JIGI</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ff0000;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .video-section {
+            background: #111;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(45deg, #333, #555);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        .video-controls {
+            padding: 1rem;
+            background: #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: #ff6b35;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #e55a2b;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .volume-slider {
+            width: 100px;
+        }
+
+        .quality-selector {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .sidebar {
+            background: #111;
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .program-schedule {
+            margin-bottom: 2rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #222;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .schedule-item.current {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .schedule-time {
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .schedule-item.current .schedule-time {
+            color: white;
+        }
+
+        .chat-section {
+            background: #222;
+            border-radius: 10px;
+            padding: 1rem;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: #333;
+            border-radius: 5px;
+        }
+
+        .chat-message {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: #444;
+            border-radius: 5px;
+        }
+
+        .chat-user {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+
+        .chat-input button {
+            background: #ff6b35;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .related-content {
+            background: #111;
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .content-card {
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .content-card:hover {
+            transform: scale(1.05);
+        }
+
+        .content-thumbnail {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .content-info {
+            padding: 1rem;
+        }
+
+        .content-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-duration {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ff6b35;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .video-player {
+                height: 300px;
+            }
+            
+            .content-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">← Retour à l'accueil</a>
+        
+        <div class="header">
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                <span>EN DIRECT</span>
+            </div>
+            <h1>Web TV JIGI</h1>
+            <p>Regardez la télévision malienne en direct</p>
+        </div>
+
+        <div class="main-content">
+            <div class="video-section">
+                <div class="video-player">
+                    📺 Lecteur vidéo en streaming live<br>
+                    <small>Programme en cours : Journal du soir - 20h00</small>
+                </div>
+                <div class="video-controls">
+                    <div>
+                        <button class="control-btn" onclick="togglePlay()">⏸️ Pause</button>
+                        <button class="control-btn" onclick="toggleFullscreen()">⛶ Plein écran</button>
+                    </div>
+                    <div class="volume-control">
+                        <span>🔊</span>
+                        <input type="range" class="volume-slider" min="0" max="100" value="80">
+                    </div>
+                    <div>
+                        <select class="quality-selector">
+                            <option value="auto">Auto</option>
+                            <option value="1080p">1080p HD</option>
+                            <option value="720p">720p</option>
+                            <option value="480p">480p</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="program-schedule">
+                    <h3>Programme du jour</h3>
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">18:00</div>
+                            <div>Émission culturelle</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">19:00</div>
+                            <div>Documentaire Mali</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item current">
+                        <div>
+                            <div class="schedule-time">20:00</div>
+                            <div>Journal du soir</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">21:00</div>
+                            <div>Série Kôrô</div>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div>
+                            <div class="schedule-time">22:00</div>
+                            <div>Musique traditionnelle</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-section">
+                    <h3>Chat en direct</h3>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message">
+                            <span class="chat-user">Aminata:</span> Excellent journal ce soir !
+                        </div>
+                        <div class="chat-message">
+                            <span class="chat-user">Moussa:</span> J'adore cette émission
+                        </div>
+                        <div class="chat-message">
+                            <span class="chat-user">Fatoumata:</span> Vivement la série Kôrô !
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Tapez votre message..." id="chatInput">
+                        <button onclick="sendMessage()">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="related-content">
+            <h2>Émissions associées</h2>
+            <div class="content-grid">
+                <div class="content-card" onclick="playContent('replay1')">
+                    <div class="content-thumbnail">Journal 19/01</div>
+                    <div class="content-info">
+                        <div class="content-title">Journal du 19 janvier</div>
+                        <div class="content-duration">30 min</div>
+                    </div>
+                </div>
+                <div class="content-card" onclick="playContent('replay2')">
+                    <div class="content-thumbnail">Kôrô Ep.5</div>
+                    <div class="content-info">
+                        <div class="content-title">Série Kôrô - Épisode 5</div>
+                        <div class="content-duration">45 min</div>
+                    </div>
+                </div>
+                <div class="content-card" onclick="playContent('replay3')">
+                    <div class="content-thumbnail">Doc. Tombouctou</div>
+                    <div class="content-info">
+                        <div class="content-title">Documentaire Tombouctou</div>
+                        <div class="content-duration">60 min</div>
+                    </div>
+                </div>
+                <div class="content-card" onclick="playContent('replay4')">
+                    <div class="content-thumbnail">Musique Mali</div>
+                    <div class="content-info">
+                        <div class="content-title">Musique traditionnelle</div>
+                        <div class="content-duration">90 min</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isPlaying = true;
+        let isFullscreen = false;
+
+        function togglePlay() {
+            const btn = event.target;
+            if (isPlaying) {
+                btn.textContent = '▶️ Lecture';
+                isPlaying = false;
+            } else {
+                btn.textContent = '⏸️ Pause';
+                isPlaying = true;
+            }
+        }
+
+        function toggleFullscreen() {
+            const videoSection = document.querySelector('.video-section');
+            if (!isFullscreen) {
+                if (videoSection.requestFullscreen) {
+                    videoSection.requestFullscreen();
+                }
+                isFullscreen = true;
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+                isFullscreen = false;
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            
+            if (input.value.trim()) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message';
+                messageDiv.innerHTML = `<span class="chat-user">Vous:</span> ${input.value}`;
+                messages.appendChild(messageDiv);
+                messages.scrollTop = messages.scrollHeight;
+                input.value = '';
+            }
+        }
+
+        function playContent(contentId) {
+            alert(`Lecture de ${contentId}... (Fonctionnalité à implémenter)`);
+        }
+
+        // Simulate live chat updates
+        function addRandomMessage() {
+            const users = ['Aminata', 'Moussa', 'Fatoumata', 'Ibrahim', 'Mariam'];
+            const messages = [
+                'Très bonne émission !',
+                'J\'adore JIGI TV',
+                'Excellent programme',
+                'Merci pour ce contenu',
+                'Continuez comme ça !',
+                'Vive le Mali !',
+                'Super qualité vidéo'
+            ];
+            
+            const randomUser = users[Math.floor(Math.random() * users.length)];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            messageDiv.innerHTML = `<span class="chat-user">${randomUser}:</span> ${randomMessage}`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Remove old messages if too many
+            if (chatMessages.children.length > 10) {
+                chatMessages.removeChild(chatMessages.firstChild);
+            }
+        }
+
+        // Add random messages every 15-30 seconds
+        setInterval(addRandomMessage, Math.random() * 15000 + 15000);
+
+        // Enter key to send message
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Update current program indicator
+        function updateCurrentProgram() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            const scheduleItems = document.querySelectorAll('.schedule-item');
+            scheduleItems.forEach(item => {
+                item.classList.remove('current');
+            });
+            
+            // Simple logic to highlight current program based on time
+            if (hour >= 18 && hour < 19) {
+                scheduleItems[0].classList.add('current');
+            } else if (hour >= 19 && hour < 20) {
+                scheduleItems[1].classList.add('current');
+            } else if (hour >= 20 && hour < 21) {
+                scheduleItems[2].classList.add('current');
+            } else if (hour >= 21 && hour < 22) {
+                scheduleItems[3].classList.add('current');
+            } else if (hour >= 22) {
+                scheduleItems[4].classList.add('current');
+            }
+        }
+
+        // Update every minute
+        setInterval(updateCurrentProgram, 60000);
+        updateCurrentProgram(); // Initial call
+    </script>
+</body>
+</html>
+

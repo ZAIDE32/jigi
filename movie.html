@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeelen - JIGI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ff6b35;
+        }
+
+        .movie-header {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .movie-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .movie-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+
+        .movie-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: #222;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .meta-label {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 1.5rem;
+        }
+
+        .rating-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .movie-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: #ccc;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid #ff6b35;
+            color: #ff6b35;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: #ff6b35;
+            color: white;
+        }
+
+        .trailer-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #ff6b35;
+        }
+
+        .trailer-player {
+            width: 100%;
+            height: 400px;
+            background: #111;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #ccc;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .trailer-player:hover {
+            transform: scale(1.02);
+        }
+
+        .cast-crew {
+            background: #111;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .cast-member {
+            text-align: center;
+            background: #222;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .cast-photo {
+            width: 80px;
+            height: 80px;
+            background: #ff6b35;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cast-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cast-role {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .suggestions {
+            background: #111;
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .suggestion-card {
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .suggestion-card:hover {
+            transform: scale(1.05);
+        }
+
+        .suggestion-poster {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(45deg, #333, #555);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .suggestion-info {
+            padding: 1rem;
+        }
+
+        .suggestion-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .suggestion-rating {
+            color: #ffd700;
+            font-size: 0.9rem;
+        }
+
+        .reviews-section {
+            background: #111;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .review-card {
+            background: #222;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-name {
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .review-rating {
+            color: #ffd700;
+        }
+
+        .review-text {
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .add-review {
+            background: #222;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .review-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .rating-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .star-btn:hover,
+        .star-btn.active {
+            color: #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .movie-header {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .movie-poster {
+                height: 300px;
+                margin: 0 auto;
+                max-width: 200px;
+            }
+
+            .movie-title {
+                font-size: 2rem;
+            }
+
+            .movie-meta {
+                gap: 1rem;
+            }
+
+            .action-buttons {
+                justify-content: center;
+            }
+
+            .cast-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+
+            .suggestions-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">← Retour à l'accueil</a>
+
+        <div class="movie-header">
+            <div class="movie-poster">
+                YEELEN
+            </div>
+            <div class="movie-info">
+                <h1 class="movie-title">Yeelen</h1>
+                <div class="movie-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Année:</span> 1987
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Durée:</span> 105 min
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Genre:</span> Drame
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Langue:</span> Bambara
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Pays:</span> Mali
+                    </div>
+                </div>
+                <div class="rating">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <div class="rating-score">4.8/5</div>
+                    <div>(127 avis)</div>
+                </div>
+                <div class="movie-description">
+                    Chef-d'œuvre du cinéma africain réalisé par Souleymane Cissé, "Yeelen" (La Lumière) raconte l'histoire d'un jeune homme qui doit affronter son père dans un combat mystique. Ce film, couronné du Prix du Jury au Festival de Cannes 1987, explore les traditions ancestrales du Mali à travers une quête initiatique extraordinaire.
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="watchMovie()">▶️ Regarder maintenant</button>
+                    <button class="btn btn-outline" onclick="addToWatchlist()">+ Ma liste</button>
+                    <button class="btn btn-outline" onclick="downloadMovie()">⬇️ Télécharger</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="trailer-section">
+            <h2 class="section-title">Bande-annonce</h2>
+            <div class="trailer-player" onclick="playTrailer()">
+                🎬 Cliquez pour voir la bande-annonce<br>
+                <small>Durée: 2:30</small>
+            </div>
+        </div>
+
+        <div class="cast-crew">
+            <h2 class="section-title">Distribution et équipe</h2>
+            <div class="cast-grid">
+                <div class="cast-member">
+                    <div class="cast-photo">SC</div>
+                    <div class="cast-name">Souleymane Cissé</div>
+                    <div class="cast-role">Réalisateur</div>
+                </div>
+                <div class="cast-member">
+                    <div class="cast-photo">IH</div>
+                    <div class="cast-name">Issiaka Kane</div>
+                    <div class="cast-role">Nianankoro</div>
+                </div>
+                <div class="cast-member">
+                    <div class="cast-photo">AO</div>
+                    <div class="cast-name">Aoua Sangare</div>
+                    <div class="cast-role">Attou</div>
+                </div>
+                <div class="cast-member">
+                    <div class="cast-photo">NB</div>
+                    <div class="cast-name">Niamanto Sanogo</div>
+                    <div class="cast-role">Soma</div>
+                </div>
+                <div class="cast-member">
+                    <div class="cast-photo">BK</div>
+                    <div class="cast-name">Balla Moussa Keita</div>
+                    <div class="cast-role">Le père</div>
+                </div>
+                <div class="cast-member">
+                    <div class="cast-photo">SK</div>
+                    <div class="cast-name">Soumba Traore</div>
+                    <div class="cast-role">La mère</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <h2 class="section-title">Avis des spectateurs</h2>
+            
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-name">Aminata Traoré</div>
+                    <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="review-text">
+                    Un chef-d'œuvre absolu ! Souleymane Cissé nous offre une œuvre d'une beauté visuelle époustouflante qui plonge au cœur de la spiritualité africaine. Les images sont d'une poésie rare et la musique traditionnelle sublime l'ensemble.
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-name">Moussa Konaté</div>
+                    <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="review-text">
+                    Yeelen est plus qu'un film, c'est une expérience spirituelle. La façon dont Cissé mélange tradition et modernité, réalité et mystique, est magistrale. Un incontournable du cinéma malien.
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-name">Fatoumata Diarra</div>
+                    <div class="review-rating">⭐⭐⭐⭐</div>
+                </div>
+                <div class="review-text">
+                    Film magnifique qui met en valeur notre culture malienne. Les paysages du Mali sont sublimes et l'histoire captivante. Fier de notre cinéma !
+                </div>
+            </div>
+
+            <div class="add-review">
+                <h3>Ajouter votre avis</h3>
+                <form class="review-form" onsubmit="submitReview(event)">
+                    <div class="form-group">
+                        <label>Votre note</label>
+                        <div class="rating-input">
+                            <button type="button" class="star-btn" onclick="setRating(1)">★</button>
+                            <button type="button" class="star-btn" onclick="setRating(2)">★</button>
+                            <button type="button" class="star-btn" onclick="setRating(3)">★</button>
+                            <button type="button" class="star-btn" onclick="setRating(4)">★</button>
+                            <button type="button" class="star-btn" onclick="setRating(5)">★</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewerName">Votre nom</label>
+                        <input type="text" id="reviewerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewText">Votre avis</label>
+                        <textarea id="reviewText" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Publier l'avis</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="suggestions">
+            <h2 class="section-title">Vous aimerez aussi</h2>
+            <div class="suggestions-grid">
+                <div class="suggestion-card" onclick="goToMovie('guimba')">
+                    <div class="suggestion-poster">GUIMBA</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-title">Guimba</div>
+                        <div class="suggestion-rating">⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+                <div class="suggestion-card" onclick="goToMovie('finzan')">
+                    <div class="suggestion-poster">FINZAN</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-title">Finzan</div>
+                        <div class="suggestion-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+                <div class="suggestion-card" onclick="goToMovie('waati')">
+                    <div class="suggestion-poster">WAATI</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-title">Waati</div>
+                        <div class="suggestion-rating">⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+                <div class="suggestion-card" onclick="goToMovie('bamako')">
+                    <div class="suggestion-poster">BAMAKO</div>
+                    <div class="suggestion-info">
+                        <div class="suggestion-title">Bamako</div>
+                        <div class="suggestion-rating">⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRating = 0;
+
+        function watchMovie() {
+            alert('Lecture de Yeelen en cours... (Fonctionnalité à implémenter)');
+        }
+
+        function addToWatchlist() {
+            alert('Yeelen ajouté à votre liste ! (Fonctionnalité à implémenter)');
+        }
+
+        function downloadMovie() {
+            alert('Téléchargement de Yeelen démarré... (Fonctionnalité à implémenter)');
+        }
+
+        function playTrailer() {
+            alert('Lecture de la bande-annonce... (Fonctionnalité à implémenter)');
+        }
+
+        function setRating(rating) {
+            currentRating = rating;
+            const stars = document.querySelectorAll('.star-btn');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function submitReview(event) {
+            event.preventDefault();
+            
+            if (currentRating === 0) {
+                alert('Veuillez donner une note avant de publier votre avis.');
+                return;
+            }
+
+            const name = document.getElementById('reviewerName').value;
+            const text = document.getElementById('reviewText').value;
+            
+            // Create new review element
+            const reviewCard = document.createElement('div');
+            reviewCard.className = 'review-card';
+            reviewCard.innerHTML = `
+                <div class="review-header">
+                    <div class="reviewer-name">${name}</div>
+                    <div class="review-rating">${'⭐'.repeat(currentRating)}</div>
+                </div>
+                <div class="review-text">${text}</div>
+            `;
+            
+            // Insert before the add review form
+            const addReviewDiv = document.querySelector('.add-review');
+            addReviewDiv.parentNode.insertBefore(reviewCard, addReviewDiv);
+            
+            // Reset form
+            document.getElementById('reviewerName').value = '';
+            document.getElementById('reviewText').value = '';
+            setRating(0);
+            
+            alert('Votre avis a été publié avec succès !');
+        }
+
+        function goToMovie(movieId) {
+            alert(`Redirection vers ${movieId}... (Fonctionnalité à implémenter)`);
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

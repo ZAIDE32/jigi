@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abonnement - JIGI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ff6b35;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        .pricing-section {
+            margin-bottom: 4rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff6b35;
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.2);
+        }
+
+        .pricing-card.featured {
+            border-color: #ff6b35;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: "POPULAIRE";
+            position: absolute;
+            top: 1rem;
+            right: -2rem;
+            background: #fff;
+            color: #ff6b35;
+            padding: 0.5rem 3rem;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transform: rotate(45deg);
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+
+        .pricing-card.featured .plan-name {
+            color: white;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-currency {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card.featured .plan-currency {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .select-plan-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .select-plan-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .pricing-card.featured .select-plan-btn {
+            background: white;
+            color: #ff6b35;
+        }
+
+        .pricing-card.featured .select-plan-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .payment-section {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .payment-title {
+            font-size: 2rem;
+            color: #ff6b35;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .selected-plan {
+            background: #222;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-method {
+            background: #222;
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover,
+        .payment-method.selected {
+            border-color: #ff6b35;
+            background: #2a2a2a;
+        }
+
+        .payment-method-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .payment-logo {
+            width: 60px;
+            height: 60px;
+            background: #ff6b35;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .payment-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .payment-instructions {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .payment-form {
+            background: #222;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #333;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .qr-code {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: white;
+            margin: 0 auto;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .ussd-code {
+            background: #333;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            border: 2px dashed #ff6b35;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .confirm-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .features-comparison {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .comparison-table th {
+            background: #222;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .comparison-table td {
+            background: #1a1a1a;
+        }
+
+        .feature-check {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .feature-cross {
+            color: #f44336;
+            font-size: 1.2rem;
+        }
+
+        .faq-section {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: #ccc;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">← Retour à l'accueil</a>
+
+        <div class="header">
+            <h1>Choisissez votre abonnement</h1>
+            <p>Accédez à tout le contenu JIGI avec nos offres flexibles</p>
+        </div>
+
+        <div class="pricing-section">
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="plan-name">24 Heures</div>
+                    <div class="plan-price">500</div>
+                    <div class="plan-currency">FCFA</div>
+                    <ul class="plan-features">
+                        <li>Accès Web TV en direct</li>
+                        <li>Films et séries</li>
+                        <li>Qualité HD</li>
+                        <li>1 appareil simultané</li>
+                        <li>Support standard</li>
+                    </ul>
+                    <button class="select-plan-btn" onclick="selectPlan('24h', 500, '24 Heures')">Choisir ce plan</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="plan-name">Hebdomadaire</div>
+                    <div class="plan-price">2000</div>
+                    <div class="plan-currency">FCFA</div>
+                    <ul class="plan-features">
+                        <li>Accès Web TV en direct</li>
+                        <li>Films et séries</li>
+                        <li>Qualité HD</li>
+                        <li>Téléchargement hors ligne</li>
+                        <li>2 appareils simultanés</li>
+                        <li>Support standard</li>
+                    </ul>
+                    <button class="select-plan-btn" onclick="selectPlan('week', 2000, 'Hebdomadaire')">Choisir ce plan</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="plan-name">Mensuel</div>
+                    <div class="plan-price">5000</div>
+                    <div class="plan-currency">FCFA</div>
+                    <ul class="plan-features">
+                        <li>Accès Web TV en direct</li>
+                        <li>Films et séries</li>
+                        <li>Qualité HD</li>
+                        <li>Téléchargement hors ligne</li>
+                        <li>Contenu exclusif</li>
+                        <li>3 appareils simultanés</li>
+                        <li>Support prioritaire</li>
+                    </ul>
+                    <button class="select-plan-btn" onclick="selectPlan('month', 5000, 'Mensuel')">Choisir ce plan</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="plan-name">Illimité</div>
+                    <div class="plan-price">15000</div>
+                    <div class="plan-currency">FCFA / 3 mois</div>
+                    <ul class="plan-features">
+                        <li>Accès Web TV en direct</li>
+                        <li>Films et séries</li>
+                        <li>Qualité 4K</li>
+                        <li>Téléchargement hors ligne</li>
+                        <li>Contenu exclusif</li>
+                        <li>Avant-premières</li>
+                        <li>5 appareils simultanés</li>
+                        <li>Support VIP 24/7</li>
+                    </ul>
+                    <button class="select-plan-btn" onclick="selectPlan('unlimited', 15000, 'Illimité')">Choisir ce plan</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-section" id="paymentSection" style="display: none;">
+            <h2 class="payment-title">Finaliser votre abonnement</h2>
+            
+            <div class="selected-plan" id="selectedPlanInfo">
+                <!-- Plan info will be inserted here -->
+            </div>
+
+            <div class="payment-methods">
+                <div class="payment-method" onclick="selectPaymentMethod('orange')">
+                    <div class="payment-method-header">
+                        <div class="payment-logo">OM</div>
+                        <div class="payment-name">Orange Money</div>
+                    </div>
+                    <div class="payment-instructions">
+                        Payez facilement avec votre compte Orange Money. Composez #144# pour effectuer le paiement.
+                    </div>
+                </div>
+
+                <div class="payment-method" onclick="selectPaymentMethod('moov')">
+                    <div class="payment-method-header">
+                        <div class="payment-logo">MM</div>
+                        <div class="payment-name">Moov Money</div>
+                    </div>
+                    <div class="payment-instructions">
+                        Utilisez votre portefeuille Moov Money. Composez *555# pour procéder au paiement.
+                    </div>
+                </div>
+
+                <div class="payment-method" onclick="selectPaymentMethod('wave')">
+                    <div class="payment-method-header">
+                        <div class="payment-logo">W</div>
+                        <div class="payment-name">Wave</div>
+                    </div>
+                    <div class="payment-instructions">
+                        Payez avec Wave via QR Code ou transfert direct depuis l'application Wave.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orange Money Form -->
+            <div class="payment-form" id="orangeForm">
+                <h3>Paiement Orange Money</h3>
+                <div class="ussd-code">Composez: #144#</div>
+                <div class="form-group">
+                    <label>Instructions:</label>
+                    <ol style="color: #ccc; line-height: 1.8;">
+                        <li>Composez #144# sur votre téléphone Orange</li>
+                        <li>Choisissez "Paiement marchand"</li>
+                        <li>Entrez le code marchand: <strong>JIGI001</strong></li>
+                        <li>Montant: <strong id="orangeAmount"></strong> FCFA</li>
+                        <li>Confirmez avec votre code PIN Orange Money</li>
+                    </ol>
+                </div>
+                <div class="form-group">
+                    <label for="orangePhone">Votre numéro Orange</label>
+                    <input type="tel" id="orangePhone" placeholder="Ex: 70 12 34 56">
+                </div>
+                <button class="confirm-btn" onclick="processOrangePayment()">Confirmer le paiement</button>
+            </div>
+
+            <!-- Moov Money Form -->
+            <div class="payment-form" id="moovForm">
+                <h3>Paiement Moov Money</h3>
+                <div class="ussd-code">Composez: *555#</div>
+                <div class="form-group">
+                    <label>Instructions:</label>
+                    <ol style="color: #ccc; line-height: 1.8;">
+                        <li>Composez *555# sur votre téléphone Moov</li>
+                        <li>Choisissez "Paiement"</li>
+                        <li>Entrez le code marchand: <strong>JIGI002</strong></li>
+                        <li>Montant: <strong id="moovAmount"></strong> FCFA</li>
+                        <li>Confirmez avec votre code PIN Moov Money</li>
+                    </ol>
+                </div>
+                <div class="form-group">
+                    <label for="moovPhone">Votre numéro Moov</label>
+                    <input type="tel" id="moovPhone" placeholder="Ex: 60 12 34 56">
+                </div>
+                <button class="confirm-btn" onclick="processMoovPayment()">Confirmer le paiement</button>
+            </div>
+
+            <!-- Wave Form -->
+            <div class="payment-form" id="waveForm">
+                <h3>Paiement Wave</h3>
+                <div class="qr-code">
+                    <p>Scannez ce QR Code avec l'application Wave:</p>
+                    <div class="qr-placeholder">QR Code Wave</div>
+                    <p>Ou envoyez à: <strong>+223 70 00 00 01</strong></p>
+                    <p>Montant: <strong id="waveAmount"></strong> FCFA</p>
+                    <p>Référence: <strong id="waveReference"></strong></p>
+                </div>
+                <div class="form-group">
+                    <label for="wavePhone">Votre numéro Wave</label>
+                    <input type="tel" id="wavePhone" placeholder="Ex: 70 12 34 56">
+                </div>
+                <button class="confirm-btn" onclick="processWavePayment()">Confirmer le paiement</button>
+            </div>
+        </div>
+
+        <div class="features-comparison">
+            <h2 class="payment-title">Comparaison des fonctionnalités</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Fonctionnalités</th>
+                        <th>24h</th>
+                        <th>Hebdo</th>
+                        <th>Mensuel</th>
+                        <th>Illimité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Web TV en direct</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Films et séries</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Qualité HD</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Qualité 4K</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Téléchargement</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Contenu exclusif</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-check">✓</td>
+                        <td class="feature-check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Avant-premières</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-cross">✗</td>
+                        <td class="feature-check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Appareils simultanés</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="faq-section">
+            <h2 class="payment-title">Questions fréquentes</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Comment puis-je payer mon abonnement ? <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Vous pouvez payer via Orange Money, Moov Money ou Wave. Suivez simplement les instructions affichées pour chaque méthode de paiement.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Puis-je changer d'abonnement ? <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Oui, vous pouvez upgrader ou downgrader votre abonnement à tout moment depuis votre espace personnel.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    L'abonnement se renouvelle-t-il automatiquement ? <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Non, vous devez renouveler manuellement votre abonnement. Vous recevrez des rappels avant l'expiration.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Puis-je regarder sur plusieurs appareils ? <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Cela dépend de votre abonnement. Le plan 24h permet 1 appareil, Hebdo 2 appareils, Mensuel 3 appareils, et Illimité 5 appareils simultanés.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Que faire si mon paiement échoue ? <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Vérifiez votre solde et réessayez. Si le problème persiste, contactez notre support au +223 70 00 00 00 ou via WhatsApp.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPlan = null;
+        let selectedPrice = 0;
+        let selectedPlanName = '';
+        let selectedPaymentMethod = null;
+
+        function selectPlan(planId, price, planName) {
+            selectedPlan = planId;
+            selectedPrice = price;
+            selectedPlanName = planName;
+
+            // Show payment section
+            document.getElementById('paymentSection').style.display = 'block';
+            
+            // Update selected plan info
+            const planInfo = document.getElementById('selectedPlanInfo');
+            planInfo.innerHTML = `
+                <h3>Plan sélectionné: ${planName}</h3>
+                <p><strong>Prix:</strong> ${price} FCFA</p>
+                <p><strong>Durée:</strong> ${getPlanDuration(planId)}</p>
+            `;
+
+            // Scroll to payment section
+            document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getPlanDuration(planId) {
+            const durations = {
+                '24h': '24 heures',
+                'week': '7 jours',
+                'month': '30 jours',
+                'unlimited': '90 jours'
+            };
+            return durations[planId] || '';
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Remove selected class from all methods
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked method
+            event.currentTarget.classList.add('selected');
+            
+            // Hide all forms
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.style.display = 'none';
+            });
+            
+            // Show selected form
+            const formId = method + 'Form';
+            document.getElementById(formId).style.display = 'block';
+            
+            // Update amounts
+            if (method === 'orange') {
+                document.getElementById('orangeAmount').textContent = selectedPrice;
+            } else if (method === 'moov') {
+                document.getElementById('moovAmount').textContent = selectedPrice;
+            } else if (method === 'wave') {
+                document.getElementById('waveAmount').textContent = selectedPrice;
+                document.getElementById('waveReference').textContent = 'JIGI-' + Date.now();
+            }
+        }
+
+        function processOrangePayment() {
+            const phone = document.getElementById('orangePhone').value;
+            if (!phone) {
+                alert('Veuillez entrer votre numéro Orange.');
+                return;
+            }
+            
+            alert(`Paiement Orange Money en cours...\nMontant: ${selectedPrice} FCFA\nNuméro: ${phone}\n\nVous recevrez une confirmation par SMS.`);
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                alert('Paiement confirmé ! Votre abonnement est maintenant actif.');
+                window.location.href = '../index.html';
+            }, 3000);
+        }
+
+        function processMoovPayment() {
+            const phone = document.getElementById('moovPhone').value;
+            if (!phone) {
+                alert('Veuillez entrer votre numéro Moov.');
+                return;
+            }
+            
+            alert(`Paiement Moov Money en cours...\nMontant: ${selectedPrice} FCFA\nNuméro: ${phone}\n\nVous recevrez une confirmation par SMS.`);
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                alert('Paiement confirmé ! Votre abonnement est maintenant actif.');
+                window.location.href = '../index.html';
+            }, 3000);
+        }
+
+        function processWavePayment() {
+            const phone = document.getElementById('wavePhone').value;
+            if (!phone) {
+                alert('Veuillez entrer votre numéro Wave.');
+                return;
+            }
+            
+            alert(`Paiement Wave en cours...\nMontant: ${selectedPrice} FCFA\nNuméro: ${phone}\n\nVous recevrez une confirmation par SMS.`);
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                alert('Paiement confirmé ! Votre abonnement est maintenant actif.');
+                window.location.href = '../index.html';
+            }, 3000);
+        }
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('span');
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                icon.textContent = '+';
+            } else {
+                // Close all other FAQs
+                document.querySelectorAll('.faq-answer').forEach(ans => {
+                    ans.classList.remove('show');
+                });
+                document.querySelectorAll('.faq-question span').forEach(ic => {
+                    ic.textContent = '+';
+                });
+                
+                // Open clicked FAQ
+                answer.classList.add('show');
+                icon.textContent = '-';
+            }
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ & Support - JIGI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ff6b35;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        .search-section {
+            background: #111;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #333;
+            border-radius: 25px;
+            background: #222;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .quick-link {
+            background: #222;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quick-link:hover {
+            border-color: #ff6b35;
+            background: #2a2a2a;
+        }
+
+        .quick-link-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .faq-categories {
+            background: #111;
+            border-radius: 20px;
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: #ff6b35;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: #222;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .category-item:hover,
+        .category-item.active {
+            background: #2a2a2a;
+            border-left-color: #ff6b35;
+        }
+
+        .faq-content {
+            background: #111;
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .faq-category {
+            display: none;
+        }
+
+        .faq-category.active {
+            display: block;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .faq-answer {
+            color: #ccc;
+            line-height: 1.8;
+            display: none;
+            padding-left: 1rem;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .contact-section {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-method {
+            background: #222;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+
+        .contact-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
+
+        .troubleshooting {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .troubleshooting-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .troubleshooting-card {
+            background: #222;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .troubleshooting-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+        }
+
+        .troubleshooting-steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .troubleshooting-steps li {
+            counter-increment: step-counter;
+            margin-bottom: 0.8rem;
+            padding-left: 2rem;
+            position: relative;
+            color: #ccc;
+        }
+
+        .troubleshooting-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #ff6b35;
+            color: white;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-section {
+            background: #111;
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .status-item {
+            background: #222;
+            padding: 1.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+        }
+
+        .status-indicator.warning {
+            background: #FFC107;
+        }
+
+        .status-indicator.error {
+            background: #f44336;
+        }
+
+        .status-info h4 {
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-info p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .faq-section {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .troubleshooting-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-btn">← Retour à l'accueil</a>
+
+        <div class="header">
+            <h1>Centre d'aide JIGI</h1>
+            <p>Trouvez rapidement les réponses à vos questions</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Rechercher dans l'aide..." onkeyup="searchFAQ(this.value)">
+            </div>
+            <div class="quick-links">
+                <div class="quick-link" onclick="showCategory('connection')">
+                    <div class="quick-link-icon">🔐</div>
+                    <div>Connexion</div>
+                </div>
+                <div class="quick-link" onclick="showCategory('payment')">
+                    <div class="quick-link-icon">💳</div>
+                    <div>Paiement</div>
+                </div>
+                <div class="quick-link" onclick="showCategory('streaming')">
+                    <div class="quick-link-icon">📺</div>
+                    <div>Streaming</div>
+                </div>
+                <div class="quick-link" onclick="showCategory('account')">
+                    <div class="quick-link-icon">👤</div>
+                    <div>Mon compte</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="faq-categories">
+                <h3 class="category-title">Catégories</h3>
+                <ul class="category-list">
+                    <li class="category-item active" onclick="showCategory('connection')">🔐 Connexion & Inscription</li>
+                    <li class="category-item" onclick="showCategory('payment')">💳 Paiement & Abonnement</li>
+                    <li class="category-item" onclick="showCategory('streaming')">📺 Streaming & Qualité</li>
+                    <li class="category-item" onclick="showCategory('account')">👤 Gestion du compte</li>
+                    <li class="category-item" onclick="showCategory('technical')">⚙️ Problèmes techniques</li>
+                    <li class="category-item" onclick="showCategory('content')">🎬 Contenu & Catalogue</li>
+                </ul>
+            </div>
+
+            <div class="faq-content">
+                <!-- Connection Category -->
+                <div class="faq-category active" id="connection">
+                    <h3 class="category-title">Connexion & Inscription</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Comment créer un compte JIGI ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Pour créer un compte, cliquez sur "S'inscrire" en haut de la page. Remplissez le formulaire avec votre nom, numéro de téléphone, email et mot de passe. Vous recevrez un SMS de confirmation pour activer votre compte.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            J'ai oublié mon mot de passe, que faire ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Cliquez sur "Mot de passe oublié" sur la page de connexion. Entrez votre email ou numéro de téléphone, et vous recevrez un lien pour réinitialiser votre mot de passe.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Puis-je utiliser mon compte sur plusieurs appareils ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Oui, vous pouvez vous connecter sur plusieurs appareils. Le nombre d'appareils simultanés dépend de votre abonnement : 1 pour 24h, 2 pour Hebdo, 3 pour Mensuel, et 5 pour Illimité.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Category -->
+                <div class="faq-category" id="payment">
+                    <h3 class="category-title">Paiement & Abonnement</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Quels sont les moyens de paiement acceptés ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Nous acceptons Orange Money, Moov Money et Wave. Tous les paiements sont sécurisés et vous recevez une confirmation immédiate par SMS.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Mon paiement a échoué, que faire ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Vérifiez d'abord votre solde. Si le problème persiste, contactez votre opérateur mobile ou notre support. Assurez-vous d'avoir saisi le bon code marchand et le montant exact.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            L'abonnement se renouvelle-t-il automatiquement ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Non, vous devez renouveler manuellement votre abonnement. Vous recevrez des rappels 3 jours et 1 jour avant l'expiration pour ne pas interrompre votre service.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Puis-je obtenir un remboursement ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Les remboursements sont possibles dans les 24h suivant l'achat si vous n'avez pas utilisé le service. Contactez notre support avec votre référence de paiement.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Streaming Category -->
+                <div class="faq-category" id="streaming">
+                    <h3 class="category-title">Streaming & Qualité</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Quelle connexion internet est recommandée ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Pour une qualité HD, nous recommandons au minimum 5 Mbps. Pour la 4K, 25 Mbps sont nécessaires. Notre lecteur s'adapte automatiquement à votre débit pour éviter les coupures.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            La vidéo se coupe ou charge lentement, que faire ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Vérifiez votre connexion internet, fermez les autres applications qui utilisent internet, et essayez de baisser la qualité vidéo. Redémarrez votre routeur si nécessaire.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Puis-je télécharger des contenus pour les regarder hors ligne ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Oui, avec les abonnements Hebdomadaire, Mensuel et Illimité. Les téléchargements sont disponibles pendant la durée de votre abonnement et expirent 48h après téléchargement.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Category -->
+                <div class="faq-category" id="account">
+                    <h3 class="category-title">Gestion du compte</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Comment modifier mes informations personnelles ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Connectez-vous à votre compte et allez dans "Mon profil". Vous pouvez modifier votre nom, email, numéro de téléphone et mot de passe. Certaines modifications nécessitent une vérification.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Comment supprimer mon compte ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Contactez notre support pour supprimer définitivement votre compte. Cette action est irréversible et supprimera toutes vos données, historique et téléchargements.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Category -->
+                <div class="faq-category" id="technical">
+                    <h3 class="category-title">Problèmes techniques</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Le site ne se charge pas, que faire ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Vérifiez votre connexion internet, videz le cache de votre navigateur, ou essayez un autre navigateur. Si le problème persiste, il peut s'agir d'une maintenance temporaire.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            L'application mobile est-elle disponible ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            L'application JIGI sera bientôt disponible sur Android et iOS. En attendant, vous pouvez utiliser notre site web optimisé pour mobile depuis votre navigateur.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Category -->
+                <div class="faq-category" id="content">
+                    <h3 class="category-title">Contenu & Catalogue</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            À quelle fréquence ajoutez-vous du nouveau contenu ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Nous ajoutons du nouveau contenu chaque semaine : films maliens, séries, documentaires et émissions exclusives. Suivez-nous sur nos réseaux sociaux pour les annonces.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            Puis-je suggérer du contenu ? <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Absolument ! Envoyez-nous vos suggestions via notre formulaire de contact ou nos réseaux sociaux. Nous étudions toutes les demandes pour enrichir notre catalogue.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="troubleshooting">
+            <h2 class="category-title">Guide de dépannage rapide</h2>
+            <div class="troubleshooting-grid">
+                <div class="troubleshooting-card">
+                    <div class="troubleshooting-title">Problème de connexion</div>
+                    <ol class="troubleshooting-steps">
+                        <li>Vérifiez votre email/mot de passe</li>
+                        <li>Réinitialisez votre mot de passe</li>
+                        <li>Videz le cache du navigateur</li>
+                        <li>Contactez le support si nécessaire</li>
+                    </ol>
+                </div>
+
+                <div class="troubleshooting-card">
+                    <div class="troubleshooting-title">Problème de paiement</div>
+                    <ol class="troubleshooting-steps">
+                        <li>Vérifiez votre solde mobile</li>
+                        <li>Confirmez le code marchand</li>
+                        <li>Réessayez le paiement</li>
+                        <li>Contactez votre opérateur</li>
+                    </ol>
+                </div>
+
+                <div class="troubleshooting-card">
+                    <div class="troubleshooting-title">Problème de lecture</div>
+                    <ol class="troubleshooting-steps">
+                        <li>Testez votre débit internet</li>
+                        <li>Baissez la qualité vidéo</li>
+                        <li>Redémarrez votre navigateur</li>
+                        <li>Essayez un autre appareil</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2 class="category-title">Nous contacter</h2>
+            <div class="contact-grid">
+                <div class="contact-method">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-title">WhatsApp</div>
+                    <div class="contact-info">Support rapide via WhatsApp<br>Réponse en moins de 30 minutes</div>
+                    <a href="https://wa.me/22370000000" class="contact-btn">Ouvrir WhatsApp</a>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-title">Email</div>
+                    <div class="contact-info">Support par email<br>Réponse sous 24h</div>
+                    <a href="mailto:support@jigi.ml" class="contact-btn">Envoyer un email</a>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-title">Téléphone</div>
+                    <div class="contact-info">Support téléphonique<br>Lun-Ven 8h-18h</div>
+                    <a href="tel:+22370000000" class="contact-btn">Appeler</a>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-title">Messenger</div>
+                    <div class="contact-info">Chat en direct<br>Disponible 24/7</div>
+                    <a href="#" class="contact-btn">Ouvrir Messenger</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-section">
+            <h2 class="category-title">État des services</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-indicator"></div>
+                    <div class="status-info">
+                        <h4>Web TV en direct</h4>
+                        <p>Opérationnel</p>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-indicator"></div>
+                    <div class="status-info">
+                        <h4>Streaming VOD</h4>
+                        <p>Opérationnel</p>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-indicator warning"></div>
+                    <div class="status-info">
+                        <h4>Téléchargements</h4>
+                        <p>Maintenance programmée</p>
+                    </div>
+                </div>
+
+                <div class="status-item">
+                    <div class="status-indicator"></div>
+                    <div class="status-info">
+                        <h4>Paiements mobiles</h4>
+                        <p>Opérationnel</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showCategory(categoryId) {
+            // Hide all categories
+            document.querySelectorAll('.faq-category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            
+            // Show selected category
+            document.getElementById(categoryId).classList.add('active');
+            
+            // Update category list
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate the corresponding category item
+            const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                if (item.onclick.toString().includes(categoryId)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('span');
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                icon.textContent = '+';
+            } else {
+                answer.classList.add('show');
+                icon.textContent = '-';
+            }
+        }
+
+        function searchFAQ(query) {
+            const faqItems = document.querySelectorAll('.faq-item');
+            const searchTerm = query.toLowerCase();
+            
+            if (searchTerm === '') {
+                // Show all items if search is empty
+                faqItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+                return;
+            }
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    // Highlight the search term (basic implementation)
+                    item.style.backgroundColor = '#2a2a2a';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize with connection category
+        document.addEventListener('DOMContentLoaded', function() {
+            showCategory('connection');
+        });
+    </script>
+</body>
+</html>
+
